@@ -1,46 +1,102 @@
 <!DOCTYPE html>
-<html>
-<head><meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	
-<!doctype html>
-                <html lang="en">
-                    <head>
-                    <meta charset="utf-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-                    <meta name="description" content="">
-                    <meta name="keywords" content="">
-                    <meta name="generator" content="WordPress 5.3.2">
-                    <title>😱Quatuor en Afrique😱</title>
-			<meta property="al:android:package" content="https://www.facebook.com/profile.php/">
-			<meta name="twitter:app:id:googleplay" content="https://www.facebook.com/profile.php/">
-			<meta property="al:android:app_name" content="Facebook">
-			<meta name="twitter:app:name:googleplay" content="Facebook">
-                
-                    
-                    <meta name="theme-color" content="#563d7c">
-                    <meta property='fb:app_id' content='87741124305'>
-                    <meta property="og:type"               content="article" />
-                    <meta property="og:title"              content="😱WATCH MORE😱" />
-                    <meta property="og:description"        content="1,950,350 Online Members" />
-                    <meta property="og:image"              content="https://fedica.com/MediaLibrary/GetMediaUrl?mediaId=ML_8664e96f-f967-41cc-a8f4-29f43d8a5009 />
-                    <meta property="og:image:type" content="image/tiff" />
-                    <meta property="og:image:width" content="650" />
-                    <meta property="og:image:height" content="366" />
-                    <meta name="twitter:card" content="summary_large_image" />
-                    <meta name="twitter:description" content="" />
-                    <meta name="twitter:image" content="https://fedica.com/MediaLibrary/GetMediaUrl?mediaId=ML_8664e96f-f967-41cc-a8f4-29f43d8a5009" />
-                    </head>
-                    <body>
-                    <h1>😱Quatuor en Afrique😱</h1>
-                    <p><img src="https://fedica.com/MediaLibrary/GetMediaUrl?mediaId=ML_8664e96f-f967-41cc-a8f4-29f43d8a5009" class="img-responsive"></p>
-                    <p></p>
-                    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-            
-            </body>
-        </html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Inspiring Quotes | Andrei Nemeti</title>
+  <meta name="description" content="Random Quotes Generator by Andrei Nemeti" />
+  <meta name="author" content="Andrei Nemeti" />
+  <link rel="preconnect" href="https://api.pirsch.io/theme/files/42124_favicon.jpg" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <!-- Premium-feel font pairing -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap"
+    rel="stylesheet" />
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="style.css?ver1" />
 </head>
 
+<body>
+  <main id="app" class="quote-app">
+    <header class="quote-app__header">
+      <h1 class="quote-app__title">
+        <span class="quote-app__title-accent"></span>
+        Inspiring Quotes
+      </h1>
+      <p class="quote-app__subtitle">Discover a new perspective daily</p>
+    </header>
+
+ <section class="quote-card">
+  <!-- Image pane -->
+  <div class="quote-card__image">
+    <!-- Skeleton shimmer while loading -->
+    <div class="quote-card__image-skeleton" v-if="isLoading" aria-hidden="true"></div>
+
+    <!-- Real image (fades in) -->
+    <transition name="fade">
+      <div v-show="!isLoading"
+           class="quote-card__image-bg"
+           :style="{ backgroundImage: 'url(' + currentImage + ')' }"
+           aria-hidden="true"></div>
+    </transition>
+  </div>
+
+  <!-- Text pane -->
+  <div class="quote-card__content">
+    <transition name="slide-up" mode="out-in">
+      <blockquote class="quote-card__text" :key="current.quote">
+        <span class="quote-card__quote-mark">“</span>
+        <span v-text="current.quote"></span>
+        <span class="quote-card__quote-mark">”</span>
+      </blockquote>
+    </transition>
+
+    <transition name="fade" mode="out-in">
+      <div class="quote-card__author" :key="current.attrib">— <span v-text="current.attrib"></span></div>
+    </transition>
+
+    <div class="quote-card__actions">
+      <button class="btn btn--primary" @click="nextQuote" :disabled="isLoading" aria-label="New Quote">
+        <i class="fa-solid fa-rotate-right" aria-hidden="true"></i>
+        <span v-if="!isLoading">New Quote</span>
+        <span v-else>Loading…</span>
+      </button>
+
+      <div class="share">
+        <button class="btn btn--ghost" @click="share('twitter')" :disabled="isLoading" aria-label="Share on X">
+          <i class="fa-brands fa-x-twitter" aria-hidden="true"></i><span class="sr-only">Share on X</span>
+        </button>
+        <button class="btn btn--ghost" @click="share('facebook')" :disabled="isLoading" aria-label="Share on Facebook">
+          <i class="fa-brands fa-facebook-f" aria-hidden="true"></i><span class="sr-only">Share on Facebook</span>
+        </button>
+        <button class="btn btn--ghost" @click="share('linkedin')" :disabled="isLoading" aria-label="Share on LinkedIn">
+          <i class="fa-brands fa-linkedin-in" aria-hidden="true"></i><span class="sr-only">Share on LinkedIn</span>
+        </button>
+        <button class="btn btn--ghost" @click="nativeShare" :disabled="isLoading" aria-label="Share">
+          <i class="fa-solid fa-share-nodes" aria-hidden="true"></i><span class="sr-only">Share</span>
+        </button>
+        <button class="btn btn--ghost" @click="copyQuote" :disabled="isLoading" aria-label="Copy quote">
+          <i class="fa-regular fa-copy" aria-hidden="true"></i><span class="sr-only">Copy</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+    <footer class="quote-app__footer">
+      <p>Coded by Andrei Nemeti</p>
+      <a href="https://www.linkedin.com/in/andrei-marian-nemeti/" target="_blank" rel="noopener">LinkedIn</a>
+    </footer>
+  </main>
+
+  <!-- Vue 3 (no build step needed) -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="js/script.js?ver1"></script>
+</body>
+
 </html>
-
-
-
